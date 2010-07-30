@@ -1,0 +1,467 @@
+[Enter The Installing Environment]
+
+Use Gentoo livedvd/livecd or any Linux livedvd/livecd.
+Boot the cd/dvd.
+
+--------------------------------------------------------------------------------
+[Disk]
+
+- fdisk plan :
+-----------------------------------------------------------------
+| block   | fs   | size    | path
+-----------------------------------------------------------------
+/dev/sda1  ext2    32M       boot
+/dev/sda2  (swap)  512M      swap
+/dev/sda3  ext4    80G       /
+/dev/sda4  ext4    (remain)  /home
+
+# fdisk /dev/sda
+--delete all
+d 1
+d 2
+d 3
+d 4
+
+- boot :
+n -> p -> 1 -> (ENTER) -> +32M
+
+- swap :
+n -> p -> 2 -> (ENTER) -> +512M -> t -> 2 -> 82
+
+- \ :
+n -> p -> 3 -> (ENTER) -> +80G
+
+- \home :
+n -> p -> 4 -> (ENTER) -> (ENTER)
+
+w
+
+--------------------------------------------------------------------------------
+[Format File System]
+# mke2fs /dev/sda1
+# mkswap /dev/sda2
+# swapon /dev/sda2
+# mkfs.ext4 /dev/sda3
+# mkfs.ext4 /dev/sda4
+
+--------------------------------------------------------------------------------
+[Mount]
+# mount /dev/sda3 /mnt/gentoo
+# mkdir /mnt/gentoo/boot
+# mkdir /mnt/gentoo/home
+# mount /dev/sda1 /mnt/gentoo/boot
+# mount /dev/sda4 /mnt/gentoo/home
+
+
+--------------------------------------------------------------------------------
+[Download Stage]
+
+# cd /mnt/gentoo
+# links http://www.gentoo.org/main/en/mirrors.xml
+
+enter releases/x86/autobuilds/
+
+# md5sum -c stage3-i686-<release>.tar.bz2.DIGESTS
+# tar xvjpf stage3-*.tar.bz2
+
+--------------------------------------------------------------------------------
+[Download & Install Portage]
+
+# cd /mnt/gentoo
+# links http://www.gentoo.org/main/en/mirrors.xml
+
+enter snapshots/
+download portage-latest.tar.bz2
+
+# md5sum -c portage-latest.tar.bz2.md5sum
+# tar xvjf /mnt/gentoo/portage-latest.tar.bz2 -C /mnt/gentoo/usr
+
+
+--------------------------------------------------------------------------------
+[Configure Compiler Options]
+
+# nano -w /mnt/gentoo/etc/make.conf
+
+- /etc/make.conf :
+
+CHOST="i686-pc-linux-gnu"
+CFLAGS="-O2 -march=i686 -pipe"
+CXXFLAGS="${CFLAGS}"
+MAKEOPTS="-j3"
+INPUT_DEVICES="keyboard mouse evdev"
+VIDEO_CARDS="nvidia"
+USE="gtk gnome -qt3 -qt4 -kde dvd alsa cdr dbus X hal threads sqlite alsa ibus"
+PORTDIR_OVERLAY="/usr/local/portage"
+# GENTOO_MIRRORS="ftp://mirrors.kernel.org/gentoo/"
+# GENTOO_MIRRORS="http://mirrors.sohu.com/gentoo/"
+GENTOO_MIRRORS="http://mirrors.xmu.edu.cn/gentoo/"
+# SYNC=rsync://rsync1.cn.gentoo.org/gentoo-portage
+SYNC="rsync://mirrors.xmu.edu.cn/gentoo-portage"
+# CONFIG_PROTECT="-*"
+LINGUAS="zh_CN en"
+ACCEPT_LICENSE="*"
+EOF
+
+--------------------------------------------------------------------------------
+[Chroot]
+
+- Select the fastest mirrors server :
+# mirrorselect -i -o >> /mnt/gentoo/etc/make.conf
+# mirrorselect -i -r -o >> /mnt/gentoo/etc/make.conf
+
+- Copy DNS server IP address.
+# cp -L /etc/resolv.conf /mnt/gentoo/etc/
+
+- Mount /dev & /proc filesystem.
+# mount -t proc none /mnt/gentoo/proc
+# mount -o bind /dev /mnt/gentoo/dev
+
+- Chroot.
+# chroot /mnt/gentoo /bin/bash
+# env-update
+# source /etc/profile
+# export PS1="(chroot) $PS1"
+
+- Update portage.
+# emerge --sync
+
+# eselect profile list
+# eselect profile set 2
+
+# less /usr/portage/profiles/use.desc
+# nano -w /etc/make.conf
+
+- /etc/make.conf :
+USE="gtk gnome -qt3 -qt4 -kde dvd alsa cdr dbus X hal"
+
+# nano -w /etc/locale.gen
+# locale-gen
+
+
+--------------------------------------------------------------------------------
+[Configure Kernel]
+# ls /usr/share/zoneinfo
+# cp /usr/share/zoneinfo/GMT /etc/localtime
+
+# emerge gentoo-sources
+# ls -l /usr/src/linux
+
+# emerge genkernel
+# zcat /proc/config.gz > /usr/share/genkernel/arch/x86/kernel-config
+or
+Custom .config and copy to /usr/share/genkernel/arch/x86/kernel-config
+
+- Configure initramfs :
+- Select used modules.
+
+# Module groups for genkernel initramfs auto-loading
+
+# RAID
+MODULES_ATARAID="ataraid pdcraid hptraid"
+MODULES_DMRAID=""
+MODULES_EVMS=""
+MODULES_LVM=""
+MODULES_MDADM="dm_raid45"
+
+# Hardware (IDE/SCSI/SATA)
+MODULES_PATA="libata ahci"
+MODULES_SATA="sata_nv"
+MODULES_SCSI=""
+MODULES_WAITSCAN=""
+
+# Hardware (Network)
+MODULES_NET=""
+
+# Hardware (Pluggable)
+MODULES_FIREWIRE="ieee1394 ohci1394"
+MODULES_PCMCIA=""
+MODULES_USB="ehci-hcd uhci usb-ohci hid usb-storage uhci-hcd ohci-hcd usbhid sl811-hcd"
+
+# Filesystems
+MODULES_FS="fuse"
+EOF
+
+# genkernel all
+# nano -w /etc/modules.autoload.d/kernel-2.6
+
+
+--------------------------------------------------------------------------------
+[Configure System]
+# nano -w /etc/fstab
+
+- /etc/fstab
+/dev/sda1   /boot        ext2    defaults,noatime     1 2
+/dev/sda2   none         swap    sw                   0 0
+/dev/sda3   /            ext4    noatime              0 1
+/dev/sda4   /home        ext4    noatime              0 2
+EOF
+
+
+# nano -w /etc/conf.d/hostname
+
+- /etc/conf.d/hostname
+HOSTNAME="hostname"
+
+- Change password :
+# passwd
+
+enter root password
+
+
+--------------------------------------------------------------------------------
+[Install System Tools]
+
+# emerge syslog-ng
+# rc-update add syslog-ng default
+
+# emerge vixie-cron
+# rc-update add vixie-cron default
+
+# emerge dhcpcd
+# emerge ppp
+# emerge rp-pppoe
+# emerge net-wireless/wpa_supplicant
+# emerge net-wireless/wireless-tools
+# emerge net-wireless/broadcom-sta
+# emerge vim
+# emerge networkmanager
+
+
+--------------------------------------------------------------------------------
+[Configure Boot Loader]
+
+# emerge grub
+# nano -w /boot/grub/grub.conf
+
+- /boot/grub/grub.conf :
+
+default 0
+timeout 5
+splashimage=(hd0,0)/boot/grub/splash.xpm.gz
+
+title Gentoo Linux 2.6.30-r5
+root (hd0,0)
+kernel /boot/kernel-genkernel-x86-2.6.30-gentoo-r5 root=/dev/ram0 init=/linuxrc ramdisk=8192 real_root=/dev/sda3 
+initrd /boot/initramfs-genkernel-x86-2.6.30-gentoo-r5
+EOF
+
+# grep -v rootfs /proc/mounts > /etc/mtab
+# grub-install --no-floppy /dev/sda
+
+# exit
+# cd
+# umount /mnt/gentoo/boot /mnt/gentoo/dev /mnt/gentoo/proc /mnt/gentoo
+# reboot
+
+- Install Complete!
+
+
+--------------------------------------------------------------------------------
+[User Managment]
+
+# useradd -m -G users,wheel,audio,video -s /bin/bash niko
+# passwd niko
+
+enter the niko's password
+
+
+--------------------------------------------------------------------------------
+[Video Managment]
+
+# emerge xf86-video-nouveau
+or
+# emerge nvidia-drivers
+
+# lsmod | grep nvidia && rmmod nvidia
+# modprobe nvidia
+# update-modules
+
+- xorg.conf :
+
+Section "Device"
+  Identifier "nVidia Inc. GeForce2"
+  Driver     "nvidia""
+  VideoRam   65536
+EndSection
+
+Section "Module"
+	...
+  # Load  "dri"
+  Load  "glx"
+	...
+EndSection
+
+Section "Screen"
+	...
+  DefaultDepth 24
+  Subsection "Display"
+	...
+EndSection
+EOF
+
+- Select OpenGL interface
+# eselect opengl set nvidia
+
+
+--------------------------------------------------------------------------------
+[X System]
+# emerge xorg-server
+# env-update
+# source /etc/profile
+
+# Xorg -configure
+# X -config /root/xorg.conf.new
+
+- Before test and configure X :
+# cp /root/xorg.conf.new /etc/X11/xorg.conf
+
+- X modules :
+extmod
+dbe
+record
+dri
+dri2
+vesa
+fbdev
+fbdevhw
+evdev
+
+- mouse :
+Section "InputDevice"
+  ...
+  Option    "Device"    "/dev/input/mice"
+  Option    "Protocol"    "auto"
+  Option    "ZAxisMapping"    "4 5"
+EndSection
+
+
+- keyboard :
+Section "InputDevice"
+  Identifier  "Generic Keyboard"
+  Driver    "keyboard"
+  Option    "Device"    "/dev/input/event5"
+  Option    "CoreKeyboard"
+  Option    "XkbRules" "evdev"
+  Option    "XkbModel" "pc105"
+  Option    "XkbLayout" "cn"
+  Option    "XkbOptions" "lv3:ralt_switch"
+EndSection
+
+
+Modeline "1680x1050"x60.0  146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsync +vsync (65.3 kHz)
+
+--------------------------------------------------------------------------------
+[Gnome]
+
+# echo "gnome-base/gnome-session branding" >> /etc/portage/package.use
+# emerge gnome-light
+# emerge nm-applet
+# emerge vanilla-dmz-xcursors
+# emerge gnome-power-manager
+# emerge gimp
+# emerge gthumb
+# env-update
+# source /etc/profile
+
+# /etc/init.d/hald start
+# rc-update add hald default
+
+# /etc/init.d/dbus start
+# rc-update add dbus default
+
+# echo "exec gnome-session" > ~/.xinitrc
+# sed -i '1i\export XDG_MENU_PREFIX=gnome-' ~/.xinitrc
+
+
+--------------------------------------------------------------------------------
+[GDM]
+
+# emerge xdm
+# emerge gdm
+# rc-update add xdm default
+
+- /etc/conf.d/xdm
+
+DISPLAYMANAGER="gdm"
+EOF
+
+# gpasswd -a yourname plugdev
+
+
+--------------------------------------------------------------------------------
+[Locale & UTF-8]
+
+- Global configure
+- /etc/env.d/02local :
+
+LANG="zh_CN.UTF-8"
+LC_COLLATE="C"
+EOF
+
+- Local user configure
+- ~/.bashrc :
+
+export LANG="zh_CN.UTF-8"
+export LC_COLLATE="C"
+EOF
+
+# env-update && source /etc/profile
+# source ~/.bashrc
+
+
+--------------------------------------------------------------------------------
+[Chinese Character Fonts]
+
+# emerge wqy-bitmapfont
+# emerge wqy-microhei
+# emerge wqy-unibit
+# emerge wqy-zenhei
+# emerge droid
+
+--------------------------------------------------------------------------------
+[Input Method]
+
+# emerge ibus
+# emerge ibus-pinyin
+
+# echo '=app-i18n/sunpinyin-2.0.1 ~x86' >> /etc/portage/package.keywords
+# emerge -av sunpinyin
+
+--------------------------------------------------------------------------------
+[Music]
+
+- Install & Configure the "music player daemon"
+- Install :
+# emerge mpd
+
+- Make mpd daemon work directory :
+# cd /home
+# mkdir mpd
+# mkdir mpd/playlists
+# chown mpd.wheel mpd
+# chown mpd.wheel mpd/playlists
+# cd mpd
+# ln -s path/to/music/ music
+
+- /etc/mpd.conf :
+- Change these follow :
+
+music_directory		"/home/mpd/music"
+playlist_directory	"/home/mpd/playlists"
+playlist_directory	"/home/mpd/playlists"
+#user			"root"
+filesystem_charset	"UTF-8"
+id3v1_encoding		"GBK"
+EOF
+
+- Start daemon
+# /etc/init.d/mpd start
+# rc-update add mpd default
+
+- Note : Run "mpd" as normal user configure file is ~/.mpdconf
+                   as super user configure file is /etc/mpd.conf
+
+- Install mpd clients :
+# emerge mpc
+# emerge gmpc
+
