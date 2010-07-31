@@ -17,7 +17,7 @@ echo "Send Request : $1 ..."
 host $1
 
 # Send a http request
-req="http://$HOST/ips8.asp?ip=$1&action=2"
+req="http://$HOST/ips.asp?ip=$1&action=2"
 ret=$(curl $req | sed -n -e '/<td align="center"><ul class="ul1">/p')
 exec 3>&-
 
