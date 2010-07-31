@@ -9,16 +9,14 @@ declare -r HOST="www.ip138.com"
 # #2 : IP/Domain Name for query
 http_post_request()
 {
-	local req="ip=$2&action=2"
-	
-	echo -e -n "POST /ips8.asp HTTP/1.1\r\n"
+	local req="ips.asp?ip=$2&action=2"
+
+	echo -e -n "GET /$req HTTP/1.1\r\n"
 	echo -e -n "Host: $1\r\n"
 	echo -e -n "Connection: close\r\n"
 	echo -e -n "User-Agent: Mozilla/5.0\r\n"
-	echo -e -n "Content-Length: ${#req}\r\n"
-	echo -e -n "Content-Type: application/x-www-form-urlencoded\r\n"
-	echo -e -n "Accept: */*\r\n"
-	echo -e -n "\r\n$req"
+	echo -e -n "Accept:*/*\r\n"
+	echo -e -n "\r\n"
 }
 
 # Script entry :
@@ -32,6 +30,7 @@ fi
 
 echo "Send Request : $1 ..."
 host $1
+
 # Create file no 3
 exec 3<> /dev/tcp/${HOST}/80
 [[ $? != 0 ]] && exit 1
