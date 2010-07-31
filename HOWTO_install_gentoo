@@ -1,15 +1,17 @@
+0---+---1---+---2---+---3---+---4---+---5---+---6---+---7---+---8
+
 [Enter The Installing Environment]
 
-Use Gentoo livedvd/livecd or any Linux livedvd/livecd.
-Boot the cd/dvd.
+Use Gentoo livedvd/livecd or any Linux livedvd/livecd
+Boot the cd/dvd
 
---------------------------------------------------------------------------------
+-----------------------------------------------------------------
 [Disk]
 
-- fdisk plan :
------------------------------------------------------------------
-| block   | fs   | size    | path
------------------------------------------------------------------
+- fdisk plan 
+--------------------------------------------------
+| block   | fs   | size    | pat
+--------------------------------------------------
 /dev/sda1  ext2    32M       boot
 /dev/sda2  (swap)  512M      swap
 /dev/sda3  ext4    80G       /
@@ -20,7 +22,8 @@ Boot the cd/dvd.
 d 1
 d 2
 d 3
-d 4
+...
+d
 
 - boot :
 n -> p -> 1 -> (ENTER) -> +32M
@@ -36,16 +39,18 @@ n -> p -> 4 -> (ENTER) -> (ENTER)
 
 w
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Format File System]
+
 # mke2fs /dev/sda1
 # mkswap /dev/sda2
 # swapon /dev/sda2
 # mkfs.ext4 /dev/sda3
 # mkfs.ext4 /dev/sda4
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Mount]
+
 # mount /dev/sda3 /mnt/gentoo
 # mkdir /mnt/gentoo/boot
 # mkdir /mnt/gentoo/home
@@ -53,7 +58,7 @@ w
 # mount /dev/sda4 /mnt/gentoo/home
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Download Stage]
 
 # cd /mnt/gentoo
@@ -64,7 +69,7 @@ enter releases/x86/autobuilds/
 # md5sum -c stage3-i686-<release>.tar.bz2.DIGESTS
 # tar xvjpf stage3-*.tar.bz2
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Download & Install Portage]
 
 # cd /mnt/gentoo
@@ -77,12 +82,12 @@ download portage-latest.tar.bz2
 # tar xvjf /mnt/gentoo/portage-latest.tar.bz2 -C /mnt/gentoo/usr
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Configure Compiler Options]
 
 # nano -w /mnt/gentoo/etc/make.conf
 
-- /etc/make.conf :
+- /etc/make.conf 
 
 CHOST="i686-pc-linux-gnu"
 CFLAGS="-O2 -march=i686 -pipe"
@@ -95,14 +100,14 @@ PORTDIR_OVERLAY="/usr/local/portage"
 # GENTOO_MIRRORS="ftp://mirrors.kernel.org/gentoo/"
 # GENTOO_MIRRORS="http://mirrors.sohu.com/gentoo/"
 GENTOO_MIRRORS="http://mirrors.xmu.edu.cn/gentoo/"
-# SYNC=rsync://rsync1.cn.gentoo.org/gentoo-portage
+# SYNC=rsync://rsync1.cn.gentoo.org/gentoo-portag"
 SYNC="rsync://mirrors.xmu.edu.cn/gentoo-portage"
 # CONFIG_PROTECT="-*"
 LINGUAS="zh_CN en"
 ACCEPT_LICENSE="*"
 EOF
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Chroot]
 
 - Select the fastest mirrors server :
@@ -138,8 +143,9 @@ USE="gtk gnome -qt3 -qt4 -kde dvd alsa cdr dbus X hal"
 # locale-gen
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Configure Kernel]
+
 # ls /usr/share/zoneinfo
 # cp /usr/share/zoneinfo/GMT /etc/localtime
 
@@ -151,10 +157,10 @@ USE="gtk gnome -qt3 -qt4 -kde dvd alsa cdr dbus X hal"
 or
 Custom .config and copy to /usr/share/genkernel/arch/x86/kernel-config
 
-- Configure initramfs :
-- Select used modules.
+- Configure initramfs for Mac mini
+- Select used modules
 
-# Module groups for genkernel initramfs auto-loading
+# Module groups for genkernel initramfs auto-loadin
 
 # RAID
 MODULES_ATARAID="ataraid pdcraid hptraid"
@@ -177,15 +183,17 @@ MODULES_FIREWIRE="ieee1394 ohci1394"
 MODULES_PCMCIA=""
 MODULES_USB="ehci-hcd uhci usb-ohci hid usb-storage uhci-hcd ohci-hcd usbhid sl811-hcd"
 
-# Filesystems
+# Filesystem
 MODULES_FS="fuse"
 EOF
 
 # genkernel all
 # nano -w /etc/modules.autoload.d/kernel-2.6
 
+write modules in file "kernel-2.6" you need.
 
---------------------------------------------------------------------------------
+
+------------------------------------------------------------------
 [Configure System]
 # nano -w /etc/fstab
 
@@ -208,7 +216,7 @@ HOSTNAME="hostname"
 enter root password
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Install System Tools]
 
 # emerge syslog-ng
@@ -218,16 +226,15 @@ enter root password
 # rc-update add vixie-cron default
 
 # emerge dhcpcd
-# emerge ppp
 # emerge rp-pppoe
 # emerge net-wireless/wpa_supplicant
 # emerge net-wireless/wireless-tools
-# emerge net-wireless/broadcom-sta
+# emerge net-wireless/broadcom-sta // Need configure kernel
 # emerge vim
 # emerge networkmanager
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Configure Boot Loader]
 
 # emerge grub
@@ -251,12 +258,12 @@ EOF
 # exit
 # cd
 # umount /mnt/gentoo/boot /mnt/gentoo/dev /mnt/gentoo/proc /mnt/gentoo
-# reboot
+# reboo
 
 - Install Complete!
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [User Managment]
 
 # useradd -m -G users,wheel,audio,video -s /bin/bash niko
@@ -265,10 +272,10 @@ EOF
 enter the niko's password
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Video Managment]
 
-# emerge xf86-video-nouveau
+# emerge xf86-video-nouvea
 or
 # emerge nvidia-drivers
 
@@ -276,7 +283,7 @@ or
 # modprobe nvidia
 # update-modules
 
-- xorg.conf :
+- xorg.conf 
 
 Section "Device"
   Identifier "nVidia Inc. GeForce2"
@@ -296,14 +303,14 @@ Section "Screen"
   DefaultDepth 24
   Subsection "Display"
 	...
-EndSection
+EndSectio
 EOF
 
 - Select OpenGL interface
 # eselect opengl set nvidia
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [X System]
 # emerge xorg-server
 # env-update
@@ -350,13 +357,13 @@ EndSection
 
 Modeline "1680x1050"x60.0  146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsync +vsync (65.3 kHz)
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Gnome]
 
 # echo "gnome-base/gnome-session branding" >> /etc/portage/package.use
 # emerge gnome-light
 # emerge nm-applet
-# emerge vanilla-dmz-xcursors
+# emerge vanilla-dmz-xcursor
 # emerge gnome-power-manager
 # emerge gimp
 # emerge gthumb
@@ -373,14 +380,14 @@ Modeline "1680x1050"x60.0  146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsy
 # sed -i '1i\export XDG_MENU_PREFIX=gnome-' ~/.xinitrc
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [GDM]
 
 # emerge xdm
 # emerge gdm
 # rc-update add xdm default
 
-- /etc/conf.d/xdm
+- /etc/conf.d/xd
 
 DISPLAYMANAGER="gdm"
 EOF
@@ -388,18 +395,18 @@ EOF
 # gpasswd -a yourname plugdev
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------
 [Locale & UTF-8]
 
 - Global configure
-- /etc/env.d/02local :
+- /etc/env.d/02locale
 
 LANG="zh_CN.UTF-8"
 LC_COLLATE="C"
 EOF
 
-- Local user configure
-- ~/.bashrc :
+- Local user configur
+- ~/.bashrc 
 
 export LANG="zh_CN.UTF-8"
 export LC_COLLATE="C"
@@ -409,16 +416,16 @@ EOF
 # source ~/.bashrc
 
 
---------------------------------------------------------------------------------
+-----------------------------------------------------------------
 [Chinese Character Fonts]
 
-# emerge wqy-bitmapfont
-# emerge wqy-microhei
-# emerge wqy-unibit
-# emerge wqy-zenhei
-# emerge droid
+# emerge wqy-bitmapfon
+# emerge wqy-microhe
+# emerge wqy-unibi
+# emerge wqy-zenhe
+# emerge droi
 
---------------------------------------------------------------------------------
+-----------------------------------------------------------------
 [Input Method]
 
 # emerge ibus
@@ -427,14 +434,15 @@ EOF
 # echo '=app-i18n/sunpinyin-2.0.1 ~x86' >> /etc/portage/package.keywords
 # emerge -av sunpinyin
 
---------------------------------------------------------------------------------
+
+-----------------------------------------------------------------
 [Music]
 
 - Install & Configure the "music player daemon"
-- Install :
+- Install 
 # emerge mpd
 
-- Make mpd daemon work directory :
+- Make mpd daemon work directory 
 # cd /home
 # mkdir mpd
 # mkdir mpd/playlists
@@ -444,24 +452,44 @@ EOF
 # ln -s path/to/music/ music
 
 - /etc/mpd.conf :
-- Change these follow :
+- Change these follow
 
-music_directory		"/home/mpd/music"
-playlist_directory	"/home/mpd/playlists"
-playlist_directory	"/home/mpd/playlists"
-#user			"root"
-filesystem_charset	"UTF-8"
-id3v1_encoding		"GBK"
+music_directory "/home/mpd/music"
+playlist_directory "/home/mpd/playlists"
+playlist_directory "/home/mpd/playlists"
+#user "root"
+filesystem_charset "UTF-8"
+id3v1_encoding "GBK"
 EOF
 
-- Start daemon
+- Start daemon 
 # /etc/init.d/mpd start
 # rc-update add mpd default
 
 - Note : Run "mpd" as normal user configure file is ~/.mpdconf
                    as super user configure file is /etc/mpd.conf
 
-- Install mpd clients :
+- Install mpd clients
 # emerge mpc
 # emerge gmpc
 
+
+- Or the 2nd player : Quod Libet
+# emerge quodlibet
+# emerge quodlibet-plugins
+
+
+-----------------------------------------------------------------
+[Video]
+
+- /etc/portage/package.use :
+
+x11-libs/wxGTK unicode X
+media-video/vlc X a52 alsa dts dvd ffmpeg mp3 mpeg win32codecs ncurses opengl sdl skins truetype wxwindows xv
+EOF
+
+# emrege -av x11-libs/wxGTK
+# echo "media-video/vlc ~x86" >> /etc/portage/package.keywords
+# emerge -av vlc
+
+0---+---1---+---2---+---3---+---4---+---5---+---6---+---7---+---8
