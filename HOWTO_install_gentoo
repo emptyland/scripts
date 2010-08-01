@@ -379,6 +379,9 @@ Modeline "1680x1050"x60.0  146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsy
 # echo "exec gnome-session" > ~/.xinitrc
 # sed -i '1i\export XDG_MENU_PREFIX=gnome-' ~/.xinitrc
 
+- Append python IDE : "idle"
+# echo "dev-lang/python tk" >> /etc/portage/package.use
+# emerge -avN python
 
 ------------------------------------------------------------------
 [GDM]
