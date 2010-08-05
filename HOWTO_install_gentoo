@@ -90,7 +90,7 @@ download portage-latest.tar.bz2
 - /etc/make.conf 
 
 CHOST="i686-pc-linux-gnu"
-CFLAGS="-O2 -march=i686 -pipe"
+CFLAGS="-O2 -march=core2 -pipe"
 CXXFLAGS="${CFLAGS}"
 MAKEOPTS="-j3"
 INPUT_DEVICES="keyboard mouse evdev"
@@ -261,6 +261,14 @@ EOF
 # reboo
 
 - Install Complete!
+
+
+------------------------------------------------------------------
+[Full Optimization]
+
+- rebuild base system and extra with optimization. eg.`-march=core2`
+# emerge -e system
+# emerge -e world
 
 
 ------------------------------------------------------------------
