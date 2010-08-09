@@ -4,5 +4,5 @@
 
 emerge --sync
 emerge -avuDN world
-revdep-rebuild
 emerge -av --depclean
+revdep-rebuild
