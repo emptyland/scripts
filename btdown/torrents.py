@@ -129,11 +129,11 @@ def main():
 	global rt_log
 	(cmd, record_path, rss_urls, regular_keywords) = init_config('btdown.conf')
 	rt_log = btdown_log(record_path)
-	rt_log.log('BT auto download begin.')
+	rt_log.log('BT downloading begin.')
 	conn = init_database('database')
 	rt_log.log('Database initialized.')
 	bt_download_targets(cmd, rss_urls, regular_keywords, conn)
-	rt_log.log('BT auto download end.')
+	rt_log.log('BT downloading end.')
 	conn.close()
 	return 0
 
