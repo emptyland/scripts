@@ -124,7 +124,6 @@ def bt_download_target(cmd, url, history):
 	"""
 	global rt_log
 	generator = hashlib.md5(os.urandom(16))
-	rt_log.log('BT downloading begin.')
 	if history.url_never_downloaded( url ):
 		filename = 'tmp.%s.torrent' % (generator.hexdigest())
 		fetch_torrent(filename, url)
@@ -133,19 +132,20 @@ def bt_download_target(cmd, url, history):
 			rt_log.log( 'Fetch %s' % (url))
 			history.record(filename, url)
 			os.remove(filename)
-	rt_log.log('BT downloading end.')
 
 def bt_download_targets(conf, history):
 	"""
 	Main loop : foreach all of rss urls and fetch target torrent file(s).
 	"""
 	global rt_log
+	rt_log.log('BT downloading begin.')
 	for rss_url in conf.rss_urls:
 		xmldoc = fetch_rss_xml(rss_url)
 		rt_log.log('Parse RSS : %s' % (rss_url))
 		urls = get_target_torrent_urls( xmldoc, conf.regular_keywords )
 		for url in urls:
 			bt_download_target(conf.cmd, url, history)
+	rt_log.log('BT downloading end.')
 
 def check_running(pid_path):
 	try:
@@ -159,13 +159,20 @@ def check_running(pid_path):
 def main():
 	global rt_log
 	conf = btdown_conf('btdown.conf')
-	check_running(conf.pid_path)
-	rt_log = btdown_log(conf.log_path)
-	history = torrent_history(conf.db_path)
-	rt_log.log('Database initialized.')
-	bt_download_targets(conf, history)
-	os.remove(conf.pid_path)
-	return 0
+	try:
+		check_running(conf.pid_path)
+		rt_log = btdown_log(conf.log_path)
+		history = torrent_history(conf.db_path)
+		bt_download_targets(conf, history)
+	except IOError:
+		ret = 127
+		print 'IO error.'
+		rt_log.log('IO error.')
+	else:
+		ret = 0
+	finally:
+		os.remove(conf.pid_path)
+	return ret
 
 
 #

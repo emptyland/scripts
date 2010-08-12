@@ -1,5 +1,6 @@
 foo_rss.xml
 database
+nohup.out
 *.torrent
 *.log
 *.pid
