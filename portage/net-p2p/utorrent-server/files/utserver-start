@@ -1,0 +1,13 @@
+#!/bin/bash
+
+WORK_DIR="${HOME}/.utorrent-server"
+
+if [[ ! -d ${WORK_DIR} ]]; then
+	mkdir ${WORK_DIR}
+	ln -snf "/opt/utorrent-server/share/webui.zip" "${WORK_DIR}/webui.zip"
+fi
+
+cd ${WORK_DIR}
+nohup /opt/utorrent-server/bin/utserver & > /dev/null
+echo "utserver start"
+

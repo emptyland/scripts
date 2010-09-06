@@ -25,12 +25,10 @@ S="bittorrent-server-v$(get_major_version)_$(get_version_component_range 2)"
 
 src_install() {
 	insinto "/opt/${PN}/share/"
-
 	doins "${S}/webui.zip" || die "Failed to install webui"
 
 	exeinto "/opt/${PN}/bin/"
 	doexe "${S}/utserver" || die "Failed to install utorrent"
-
 
 	insinto "/opt/${PN}/doc"
 	doins "${S}/docs/uTorrent_Server.pdf" || die "Failed to install manual"
@@ -39,6 +37,10 @@ src_install() {
 	doins "${S}/docs/style.css" || die "Failed to install manual"
 	doins "${S}/docs/footer_ut_address.gif" || die "Failed to install manual"
 	doins "${S}/docs/ut-logo.gif" || die "Failed to install manual"
+
+	exeinto "/usr/bin"
+	doexe "${FILESDIR}/utserver-start" || die "Failed to install script"
+	doexe "${FILESDIR}/utserver-stop" || die "Failed to install script"
 
 	ewarn "This is alpha-version of uTorrent 3.0. It may fail to run on amd64 systems!"
 	einfo "To start utorrent-server type: /opt/${PN}/bin/utserver"
