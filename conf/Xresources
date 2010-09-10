@@ -1,0 +1,45 @@
+! Urxvt 配置
+
+ URxvt.geometry: 90x30+256+64
+ URxvt.visualBell: False
+! urxvt*inheritPixmap: true
+ URxvt.tintColor: white
+ URxvt.shading: 80
+ urxvt*fading: 80
+ urxvt*cursorBlink: true
+ urxvt*scrollBar: false
+ urxvt*saveLines: 65535
+
+! urxvt*borderLess: true   
+
+ urxvt*colorBD: white
+ urxvt*colorIT: green
+ URxvt.background: #000000
+ URxvt.foreground: gray85
+ URxvt.cursorColor: red3
+ URxvt.color0: #000000
+ URxvt.color1: #800000
+ URxvt.color2: #008000
+ URxvt.color3: #d0d090
+ URxvt.color4: #000080
+ URxvt.color5: #800080
+ URxvt.color6: #d0d0d0
+ URxvt.color7: #b0b0b0
+ URxvt.color8: #f08060
+ URxvt.color9: #f08060
+ URxvt.color10: #60f080
+ URxvt.color11: #e0c060
+ URxvt.color12: #80c0e0
+ URxvt.color13: #f0c0f0
+ URxvt.color14: #c0d8f8
+ URxvt.color15: #e0e0e0
+ URxvt.preeditType: Root
+
+! urxvt*font: -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso10646-1,\
+    -wenquanyi-*-medium-r-normal--13-*-*-*-p-*-iso10646-1
+
+ URxvt.font:             xft:DejaVu Sans Mono-10,xft:AR PL ShanHeiSun Uni-10
+ URxvt.boldFont:         xft:DejaVu Sans Mono-10:Bold,xft:AR PL ShanHeiSun Uni-10:Bold
+
+! 开启标签功能
+URxvt.perl-ext-common: default,tabbed
