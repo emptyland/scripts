@@ -1,4 +1,4 @@
-! Urxvt 配置
+! Urxvt configure :
 
  URxvt.geometry: 90x30+256+64
  URxvt.visualBell: False
@@ -38,8 +38,8 @@
 ! urxvt*font: -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso10646-1,\
     -wenquanyi-*-medium-r-normal--13-*-*-*-p-*-iso10646-1
 
- URxvt.font:             xft:DejaVu Sans Mono-10,xft:AR PL ShanHeiSun Uni-10
- URxvt.boldFont:         xft:DejaVu Sans Mono-10:Bold,xft:AR PL ShanHeiSun Uni-10:Bold
+ URxvt.font:             xft:Droid Sans Mono-11,xft:AR PL ShanHeiSun Uni-10
+ URxvt.boldFont:         xft:Droid Sans Mono-11:Bold,xft:AR PL ShanHeiSun Uni-10:Bold
 
-! 开启标签功能
+! Enable tabs
 URxvt.perl-ext-common: default,tabbed
