@@ -1,7 +1,17 @@
 Name : misc-scripts
 
-Some little scripts.
+Some python and bash scripts.
+Some software ".ebuild" files.
 
-Status
-ip_query.sh : unstable
+btdown                   : A auto BitTorrent download tool from RSS.
+conf                     : Gentoo Linux's configure files.
+portage                  : ebuild files.
+
+batch_mid2iconv.sh       : Convert mp3's labels.
+eupdate.sh               : Gentoo Linux updating setup script.
+ftool.py                 : File management tools.
+gensh.sh                 : Generate a formating bash script.
+ip_query.sh              : Query IP address.
+make_background_group.sh : Generate a gnome background xml file.
+wget_zh_msg_patch.sh     : Fix wget Chinese bug.
 
