@@ -1,0 +1,86 @@
+diff -ruNa flashget-1.0.3.origin/flashget.desktop flashget-1.0.3/flashget.desktop
+--- flashget-1.0.3.origin/flashget.desktop	2010-10-16 12:41:11.768000000 +0000
++++ flashget-1.0.3/flashget.desktop	2010-10-16 12:48:08.761000000 +0000
+@@ -3,12 +3,12 @@
+ Encoding=UTF-8
+ Name=FlashGet
+ Comment=网际快车
+-Exec=/usr/bin/flashget
+-Icon=/usr/share/flashget/flashget.png
++Exec=/opt/flashget/flashget
++Icon=/opt/flashget/flashget.png
+ Terminal=false
+ Type=Application
+ Categories=Application;Network;FlashGet;
+ StartupNotify=true
+ Name[zh_CN]=网际快车FlashGet
+ GenericName[zh_CN]=网际快车FlashGet
+-Comment[zh_CN]=网际快车FlashGet
+\ No newline at end of file
++Comment[zh_CN]=网际快车FlashGet
+diff -ruNa flashget-1.0.3.origin/install.sh flashget-1.0.3/install.sh
+--- flashget-1.0.3.origin/install.sh	2010-10-16 12:41:11.778000000 +0000
++++ flashget-1.0.3/install.sh	1970-01-01 00:00:00.000000000 +0000
+@@ -1,61 +0,0 @@
+-#!/bin/bash
+-#
+-#----------------------------------------
+-#
+-#         快车安装脚本
+-#
+-#	1,自动检测libexpat
+-#	2,创建启动菜单	
+-#
+-#	by: netman@flashget  2010-07-21
+-#----------------------------------------
+-
+-# 文件说明：
+-#
+-#flashget-1.0.2-+-flashget			主程序
+-#			    |-flashget.desktop  用于创建启动图表
+-#				|-flashget.png		Logo
+-#				|-install.sh		安装脚本
+-#				|-README			You get it
+-#
+-
+-
+-#######    检查 libexpat.so.0      ############
+-aexpat=`ldconfig -v 2>/dev/null|grep libexpat.so.0`
+-if [ -z  "$aexpat" ]
+-then
+-    slib=`whereis libexpat.so.|awk {'print $2'}`
+-    if [ ! -z "$slib" ];then
+-	mach=`uname -m`
+-	if [ ${mach} = "x86_64" ];then
+-		ln -s /lib32/libexpat.so /usr/lib32/libexpat.so.0 2>/dev/null
+-	else
+-        	ln -s $slib /usr/lib/libexpat.so.0 2>/dev/null
+-	fi        
+-        ldconfig 2>/dev/null
+-	echo "Make a link for libexpat.so.0"
+-    else
+-        echo "Not Found libexpat.so"
+-    fi
+-fi
+-
+-
+-#######    安装  flashget         ############
+-if [ ! -x /usr/share/flashget ];then
+-	mkdir -p /usr/share/flashget
+-fi
+-
+-# 这个是为了在PATH里面可以找到flashget
+-echo  -e  '#''!'"/bin/sh""\n""/usr/share/flashget/flashget "'"$@'\""" >/usr/bin/flashget
+-chmod a+x /usr/bin/flashget
+-install flashget /usr/share/flashget/flashget
+-install flashget.png /usr/share/flashget/flashget.png
+-
+-if [ -x /usr/share/applications/ ];then
+-	install flashget.desktop /usr/share/applications/flashget.desktop
+-else
+-	install flashget.desktop /usr/share/applnk/Internet/flashget.desktop
+-fi
+-
+-echo "install flashget to /usr/bin: yes"
+-echo "Welcome to FlashGet Network and enjoy yourself."
+\ No newline at end of file
