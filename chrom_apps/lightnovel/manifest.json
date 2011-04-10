@@ -1,0 +1,20 @@
+{
+"name": "Light Novel",
+"description": "Light Novel 轻小说论坛",
+"version": "1.0",
+"icons": {
+"128": "128.png"
+},
+"app": {
+"urls": [
+"http://www.lightnovel.cn/index.php"
+],
+"launch": {
+"web_url": "http://www.lightnovel.cn/index.php"
+}
+},
+"permissions": [
+"unlimitedStorage",
+"notifications"
+]
+}

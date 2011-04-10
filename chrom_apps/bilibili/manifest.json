@@ -1,0 +1,20 @@
+{
+"name": "Bilibili",
+"description": "Bilibili 弹幕动画网站",
+"version": "1.0",
+"icons": {
+"128": "128.png"
+},
+"app": {
+"urls": [
+"http://www.bilibili.us/video/bangumi.html"
+],
+"launch": {
+"web_url": "http://www.bilibili.us/video/bangumi.html"
+}
+},
+"permissions": [
+"unlimitedStorage",
+"notifications"
+]
+}
