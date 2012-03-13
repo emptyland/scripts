@@ -1,0 +1,41 @@
+body {
+    font-family: Geneva, Arial, Helvetica,sans-serif;
+    #margin: 0px auto;
+    #border: solid;
+    #border-color: #FFFFFF;
+    background-color: #F47D31;
+}
+
+header {
+    background-color: #F47D31;
+    #display: block;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+header h1 {
+    background-color: #F47D31;
+    font-size: 30px;
+    #margin: 0px;
+    #-webkit-box-shadow: 2px 2px 20px #888;
+    #-moz-box-shadow: 2px 2px 20px #888;
+}
+
+a {
+    background-color: #F47D31;
+    display: block;
+    color: #000000;
+    text-align: center;
+}
+
+input[id="input_url"] {
+    width: 300px;
+}
+
+p[id="output_passwd"] {
+    font-family: Consolas;
+    background-color: #F47D31;
+    color: #CCCCCC;
+    text-align: center;
+    font-size: 30px;
+}
