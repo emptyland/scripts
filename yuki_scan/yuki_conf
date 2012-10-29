@@ -1,0 +1,5 @@
+YUKI_CXX="clang++"
+YUKI_CXXFLAGS="-std=c++11 -Wall -Wextra -O0 -g"
+YUKI_SRC="src"
+YUKI_BIN="bin"
+YUKI_INC="-I../glog/src -I../gmock/include -I../gmock/gtest/include"

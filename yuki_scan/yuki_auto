@@ -1,0 +1,45 @@
+#!/bin/bash
+
+. ../yuki_conf
+
+function depend_for() {
+	for i in $(echo ${1}); do
+		[[ -f ${i} ]] && echo ${i}
+	done
+}
+
+function depend() {
+	local incs=$(grep -P "^#include \".*\"$" ${1} | awk -F" " '{print $2}' | uniq)
+	local deps=${1}
+	incs=$(echo ${incs} | sed -e "s/\"//g")
+
+	for i in $(echo ${incs}); do
+		[[ -f ${i} ]] && incs="${incs} $(depend ${i})"
+	done
+	deps="${deps} $(depend_for "${incs}" | sort | uniq)"
+	echo ${deps}
+}
+
+echo "CXX=${YUKI_CXX}"
+echo "CXXFLAGS=${YUKI_CXXFLAGS}"
+echo "LIBS=-lglog -lpthread"
+echo "INCS=${YUKI_INC}"
+echo "TEST=-lgmock -lgtest -lgtest_main"
+echo
+echo "%.o:"
+echo '	$(CXX) $(CXXFLAGS) $(INCS) $< -c -o $@'
+echo
+echo "%test:"
+echo '	$(CXX) $< -L../libs $(TEST) $(LIBS) -o $@'
+echo
+echo ".PHONY clean:"
+echo "	rm -f *.o *_test"
+echo
+for i in $(ls | grep -P ".*\.cc"); do
+	short=$(echo ${i} | sed -e "s/\.cc$//")
+	echo ${short}.o: $(depend ${i})
+done
+for i in $(ls | grep -P ".*_test.cc"); do
+	i=$(echo ${i} | sed -e "s/\.cc$//")
+	echo "${i}: ${i}.o"
+done
