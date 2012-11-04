@@ -1,0 +1,28 @@
+# Maintainer: Somebody <somebody[at]foo[dot]tld>
+pkgname=chromium_flash
+pkgver=11.2.202.243
+pkgrel=2
+pkgdesc="Adobe flash player only for Google Chromium."
+url="http://www.adobe.com/cn/products/flashplayer.html"
+arch=('x86_64')
+license=('unknown')
+depends=('chromium')
+optdepends=()
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+install=''
+source='http://fpdownload.macromedia.com/get/flashplayer/pdc/11.2.202.243/install_flash_player_11_linux_x86_64.tar.gz'
+md5sums='d9a925117f643f2678a2609d25734b15'
+
+build() {
+  echo 'Do nothing ...'
+}
+
+package() {
+  local dest="${pkgdir}/usr/lib/chromium/plugins"
+  install -Dm755 libflashplayer.so "${dest}/libflashplayer.so"
+}
+
+# vim:set ts=2 sw=2 et:
