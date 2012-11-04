@@ -1,0 +1,49 @@
+# Maintainer: Somebody <somebody[at]foo[dot]tld>
+pkgname=sublime_text
+pkgver=2.0.1
+pkgrel=2
+pkgdesc="Sublime Text is a sophisticated text editor for code, markup and prose.
+You'll love the slick user interface, extraordinary features and amazing performance."
+url="http://www.sublimetext.com/"
+arch=('x86_64')
+license=('unknown')
+depends=('python2')
+optdepends=()
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+install=''
+source=("http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.1%20x64.tar.bz2"
+        "sublime_text.desktop")
+md5sums=('bd816d93239a0af9ade257b2a9dcf8d2'
+         'cf0b6a7d5c93b4ee5f39ba252d6b64e9')
+
+build() {
+	cd "Sublime Text 2"
+}
+
+package() {
+  local icon="${pkgdir}/usr/share/icons/gnome"
+  local apps="${pkgdir}/usr/share/applications"
+  local inst="${pkgdir}/opt/Sublime_Text_2"
+
+  install -d -Dm755 "Sublime Text 2" ${inst}
+  cp -r Sublime\ Text\ 2/* ${inst}
+
+  install -Dm644 "sublime_text.desktop" "${apps}/sublime_text.desktop"
+
+  mkdir -p "${icon}/16x16/apps" > /dev/null
+  mkdir -p "${icon}/32x32/apps" > /dev/null
+  mkdir -p "${icon}/48x48/apps" > /dev/null
+  mkdir -p "${icon}/128x128/apps" > /dev/null
+  mkdir -p "${icon}/256x256/apps" > /dev/null
+  cd ${inst}
+  ln -snf "16x16/sublime_text.png" "${icon}/16x16/apps/sublime_text.png"
+  ln -snf "32x32/sublime_text.png" "${icon}/32x32/apps/sublime_text.png"
+  ln -snf "48x48/sublime_text.png" "${icon}/48x48/apps/sublime_text.png"
+  ln -snf "128x128/sublime_text.png" "${icon}/128x128/apps/sublime_text.png"
+  ln -snf "256x256/sublime_text.png" "${icon}/256x256/apps/sublime_text.png"
+}
+
+# vim:set ts=2 sw=2 et:

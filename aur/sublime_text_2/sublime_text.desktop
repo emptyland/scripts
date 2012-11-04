@@ -1,0 +1,20 @@
+[Desktop Entry]
+Name=Sublime Text
+Name[zh_CN]=Sublime Text
+Name[zh_HK]=Sublime Text
+Name[zh_TW]=Sublime Text
+GenericName=Text Editor
+GenericName[zh_CN]=文本编辑器
+GenericName[zh_HK]=文字編輯器
+GenericName[zh_TW]=文字編輯器
+Comment=Edit text files
+Comment[zh_CN]=编辑文本文件
+Comment[zh_HK]=編輯文字檔
+Comment[zh_TW]=編輯文字檔
+Exec=/opt/Sublime_Text_2/sublime_text
+Terminal=false
+Type=Application
+StartupNotify=true
+MimeType=text/plain;
+Icon=sublime_text
+Categories=GNOME;GTK;Utility;TextEditor;
