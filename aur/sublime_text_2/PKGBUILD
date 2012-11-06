@@ -39,11 +39,13 @@ package() {
   mkdir -p "${icon}/128x128/apps" > /dev/null
   mkdir -p "${icon}/256x256/apps" > /dev/null
   cd ${inst}
-  ln -snf "16x16/sublime_text.png" "${icon}/16x16/apps/sublime_text.png"
-  ln -snf "32x32/sublime_text.png" "${icon}/32x32/apps/sublime_text.png"
-  ln -snf "48x48/sublime_text.png" "${icon}/48x48/apps/sublime_text.png"
-  ln -snf "128x128/sublime_text.png" "${icon}/128x128/apps/sublime_text.png"
-  ln -snf "256x256/sublime_text.png" "${icon}/256x256/apps/sublime_text.png"
+
+  local prefix="/opt/Sublime_Text_2/Icon"
+  ln -snf "${prefix}/16x16/sublime_text.png" "${icon}/16x16/apps/sublime_text.png"
+  ln -snf "${prefix}/32x32/sublime_text.png" "${icon}/32x32/apps/sublime_text.png"
+  ln -snf "${prefix}/48x48/sublime_text.png" "${icon}/48x48/apps/sublime_text.png"
+  ln -snf "${prefix}/128x128/sublime_text.png" "${icon}/128x128/apps/sublime_text.png"
+  ln -snf "${prefix}/256x256/sublime_text.png" "${icon}/256x256/apps/sublime_text.png"
 }
 
 # vim:set ts=2 sw=2 et:
