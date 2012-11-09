@@ -24,7 +24,7 @@
 <menu id="apps-editors-menu" label="Editors">
   <item label="Sublime Text 2">
     <action name="Execute">
-      <command>/opt/Sublime\ Text\ 2/sublime_text</command>
+      <command>/opt/Sublime_Text_2/sublime_text</command>
       <startupnotify>
         <enabled>yes</enabled>
         <wmclass>Sublime_text</wmclass>
@@ -186,15 +186,19 @@
   <menu id="system-menu"/>
   <separator />
   <item label="Log Out">
-    <action name="Exit">
-      <prompt>yes</prompt>
+    <action name="Execute">
+      <command>killall -9 openbox</command>
     </action>
   </item>
-  <item label="Session Logout">
-    <action name="SessionLogout"/>
+  <item label="Reboot">
+    <action name="Execute">
+      <command>sudo systemctl reboot</command>
+    </action>
   </item>
-  <item label="Restart">
-    <action name="Restart"/>
+  <item label="Shutdown">
+    <action name="Execute">
+      <command>sudo systemctl poweroff</command>
+    </action>
   </item>
 </menu>
 

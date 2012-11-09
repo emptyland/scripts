@@ -1,6 +1,6 @@
 # Maintainer: Somebody <somebody[at]foo[dot]tld>
 pkgname=chromium_flash
-pkgver=11.2.202.243
+pkgver=11.2.202.251
 pkgrel=2
 pkgdesc="Adobe flash player only for Google Chromium."
 url="http://www.adobe.com/cn/products/flashplayer.html"
@@ -13,8 +13,8 @@ conflicts=()
 replaces=()
 backup=()
 install=''
-source='http://fpdownload.macromedia.com/get/flashplayer/pdc/11.2.202.243/install_flash_player_11_linux_x86_64.tar.gz'
-md5sums='d9a925117f643f2678a2609d25734b15'
+source="http://fpdownload.macromedia.com/get/flashplayer/pdc/${pkgver}/install_flash_player_11_linux_x86_64.tar.gz"
+md5sums='4efd7f0a0041a26e6c148120bcc311bb'
 
 build() {
   echo 'Do nothing ...'
