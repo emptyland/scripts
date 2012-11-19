@@ -1,3 +1,5 @@
 *.xz
 *.bz2
 *.gz
+fast_app/app_host_list.txt
+fast_app/fast_app

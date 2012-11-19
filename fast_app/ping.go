@@ -22,19 +22,20 @@ type pingResult struct {
 }
 
 func pingRoutine(queue chan *pingResult, begin, end int) {
-	retrySleepTime, _ := time.ParseDuration("500ms")
-
 	for i := begin; i < end; i++ {
-		hostname := fmt.Sprint("a", i, ".phobos.apple.com")
+		hostname := fmt.Sprint("a", i + 1, ".phobos.apple.com")
 		var duration *time.Duration
 		var err error
-		for j := 0; j < 3; j++ { // retry 3 times
-			duration, err = ping(hostname, uint16(i))
+		var j int
+		durations := make([]*time.Duration, 3);
+		for j = 0; j < 3; j++ {
+			durations[j], err = pingHost(hostname, uint16(i))
 			if err != nil {
-				time.Sleep(retrySleepTime)
-				continue
+				break
 			}
-			break
+		}
+		if (j == 3) {
+			duration = mid3(durations)
 		}
 		queue <- &pingResult{
 			Duration: duration,
@@ -42,6 +43,35 @@ func pingRoutine(queue chan *pingResult, begin, end int) {
 			Hostname: hostname,
 		}
 	}
+}
+
+func mid3(a []*time.Duration) *time.Duration {
+	if a[1].Nanoseconds() < a[0].Nanoseconds() {
+		a[0], a[1] = a[1], a[0]
+	}
+	if a[2].Nanoseconds() < a[0].Nanoseconds() {
+		a[0], a[2] = a[2], a[0]
+	}
+	if a[2].Nanoseconds() < a[1].Nanoseconds() {
+		a[1], a[2] = a[2], a[1]
+	}
+	return a[1]
+}
+
+func pingHost(hostname string, sequence uint16) (*time.Duration, error) {
+	retrySleepTime, _ := time.ParseDuration("500ms")
+
+	var duration *time.Duration
+	var err error
+	for i := 0; i < 3; i++ { // retry 3 times
+		duration, err = ping(hostname, uint16(i))
+		if err != nil {
+			time.Sleep(retrySleepTime)
+			continue
+		}
+		break
+	}
+	return duration, err
 }
 
 func ping(host string, sequence uint16) (*time.Duration, error) {
@@ -115,6 +145,8 @@ func main() {
 				fastHostname = result.Hostname
 			}
 			file.WriteString(fmt.Sprint(result.Duration, "\t", result.Hostname, "\n"))
+		} else {
+			fmt.Println(result.Hostname, ": ", result.Error)
 		}
 		if i%100 == 0 {
 			fmt.Printf(". %d ", i)
