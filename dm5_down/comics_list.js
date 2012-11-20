@@ -2,58 +2,72 @@ var http = require('http');
 var html = require('htmlparser');
 var select = require('soupselect').select;
 var allImgUrl = require('./comics_down').allImgUrl;
+var events = require('events');
+var util = require('util');
 
+// Class define:
+function ListFetcher(url) {
+	events.EventEmitter.call(this);
+	this.url = url;
+}
+util.inherits(ListFetcher, events.EventEmitter);
+// End
 
-function getList(url, callback) {
-	http.get(url, function (res) {
+ListFetcher.prototype.fetch = function () {
+	var self = this;
+	http.get(this.url, function (res) {
 		var content = '';
 		res.setEncoding('utf8');
 		res.on('data', function (chunk) {
 			content += chunk.toString();
 		});
 		res.on('end', function () {
-			if (typeof res.headers.location == 'string')
-				getList(res.headers.location, callback);
-			else
-				parseHtml(content, callback);
+			if (typeof res.headers.location == 'string') {
+				self.url = res.headers.location;
+				self.fetch();
+			} else {
+				self.parseHtml(content);
+			}
 		});
 	}).on('error', function(err) {
-		callback(err);
+		self.emit('error', err);
 	});
 }
 
-function parseHtml(content, callback) {
+ListFetcher.prototype.parseHtml = function (content) {
+	var self = this;
 	var handler = new html.DefaultHandler(function (err, dom) {
 		if (err)
-			callback(err)
+			self.emit('error', err);
 	});
 	var parser = new html.Parser(handler);
 	parser.parseComplete(content);
+	if (typeof handler.dom == 'undefined')
+		return;
 	select(handler.dom, 'a.tg').forEach(function (child) {
-		callback(null, {
+		self.emit('data', {
 			title: child.attribs.title,
 			href: child.attribs.href.substr(0, child.attribs.href.length - 1)
 		});
 	});
+	self.emit('end');
 }
 
-// getList('http://www.dm5.com/manhua-zuiqianghuizhangheishen/', function (err, pair) {
-// 	console.log(pair);
-// });
+exports.fetchList = function (url) {
+	return new ListFetcher(url);
+}
 
-exports.getList = getList;
+function demo(url) {
+	var list = [];
+	exports.fetchList(url).on('data', function (info) {
+		console.log('data');
+		list.push(info);
+	}).on('error', function (err) {
+		console.log('error');
+		list.push(null);
+	}).on('end', function () {
+		console.log(list);
+	}).fetch();
+}
 
-getList('http://www.dm5.com/manhua-zuiqianghuizhangheishen/', function (err, pair) {
-	if (err) {
-		console.log(err);
-		return;
-	}
-	//console.log('--------' + pair.title + '--------');
-	allImgUrl('http://www.dm5.com/' + pair.href, function (err, imgUrl) {
-		if (err) {
-			console.log(pair.title + ' Error: ' + err);
-			return;
-		}
-		console.log('    ' + imgUrl);
-	});
-});
+demo('http://www.dm5.com/manhua-zuiqianghuizhangheishen/');
