@@ -1,5 +1,7 @@
 *.xz
 *.bz2
 *.gz
+*.node
+dm5_down/node_modules
 fast_app/app_host_list.txt
 fast_app/fast_app
