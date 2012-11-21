@@ -7,11 +7,13 @@ var URL = require('url');
 var zlib = require('zlib');
 var events = require('events');
 var util = require('util');
+var child_process = require('child_process');
 
 // Class define:
 function ImgUrlFetcher(url) {
 	events.EventEmitter.call(this);
 	this.url = url;
+	this.complete = 0;
 }
 util.inherits(ImgUrlFetcher, events.EventEmitter);
 // End
@@ -181,7 +183,7 @@ ImgUrlFetcher.prototype.parseImgUrl = function (url, options) {
 						eval(buf.toString('utf8'));
 						self.emit('data', d[0], options);
 					}
-					if (options.page == options.maxcount)
+					if (++(self.complete) == options.maxcount)
 						self.emit('end');
 				});
 				break
@@ -268,4 +270,4 @@ function demo(url) {
 }
 
 //demo('http://tel.dm5.com/m87284');
-demo('http://tel.dm5.com/m115296');
+//demoDownload('http://www.dm5.com/m115296');

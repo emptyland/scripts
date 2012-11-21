@@ -44,13 +44,22 @@ ListFetcher.prototype.parseHtml = function (content) {
 	parser.parseComplete(content);
 	if (typeof handler.dom == 'undefined')
 		return;
+	var list = []
 	select(handler.dom, 'a.tg').forEach(function (child) {
-		self.emit('data', {
+		list.push({
 			title: child.attribs.title,
 			href: child.attribs.href.substr(0, child.attribs.href.length - 1)
 		});
 	});
-	self.emit('end');
+	self.emit('end', list);
+	/*var list = [];
+	for (var i in select(handler.dom, 'a.tg')) {
+		list.push({
+			title: i.attribs.title,
+			href:  i.attribs.href.substr(0, i.attribs.href.length - 1)
+		});
+	}
+	self.emit('end', list);*/
 }
 
 exports.fetchList = function (url) {
@@ -58,16 +67,11 @@ exports.fetchList = function (url) {
 }
 
 function demo(url) {
-	var list = [];
-	exports.fetchList(url).on('data', function (info) {
-		console.log('data');
-		list.push(info);
-	}).on('error', function (err) {
+	exports.fetchList(url).on('error', function (err) {
 		console.log('error');
-		list.push(null);
-	}).on('end', function () {
+	}).on('end', function (list) {
 		console.log(list);
 	}).fetch();
 }
 
-demo('http://www.dm5.com/manhua-zuiqianghuizhangheishen/');
+//demo('http://www.dm5.com/manhua-zuiqianghuizhangheishen/');
