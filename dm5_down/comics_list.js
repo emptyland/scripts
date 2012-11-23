@@ -44,22 +44,12 @@ ListFetcher.prototype.parseHtml = function (content) {
 	parser.parseComplete(content);
 	if (typeof handler.dom == 'undefined')
 		return;
-	var list = []
+	var chapters = {}
 	select(handler.dom, 'a.tg').forEach(function (child) {
-		list.push({
-			title: child.attribs.title,
-			href: child.attribs.href.substr(0, child.attribs.href.length - 1)
-		});
+		chapters[child.attribs.title] =
+			child.attribs.href.substr(0, child.attribs.href.length - 1);
 	});
-	self.emit('end', list);
-	/*var list = [];
-	for (var i in select(handler.dom, 'a.tg')) {
-		list.push({
-			title: i.attribs.title,
-			href:  i.attribs.href.substr(0, i.attribs.href.length - 1)
-		});
-	}
-	self.emit('end', list);*/
+	self.emit('end', chapters);
 }
 
 exports.fetchList = function (url) {

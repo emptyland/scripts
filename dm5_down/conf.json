@@ -1,0 +1,4 @@
+{
+	prefix: 'cache/',
+	db: 'data/dm5.db'
+}

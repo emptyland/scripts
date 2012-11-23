@@ -35,9 +35,7 @@ ImgFetcher.prototype.fetch = function (imgUrl, index) {
 	var cmd = 'wget \'' + imgUrl + '\' --header=\"Referer: '
 		+ self.url + '\" -q -O \"' + self.dir + index + '.' + cap[1] + '\"';
 	child_process.exec(cmd, function () {}).on('exit', function (code) {
-		if (code != 0)
-			console.log('Error code: ' + code);
-		self.emit('progress', code, index);
+		self.emit('progress', code, index, imgUrl);
 		self.complete++;
 		if (self.complete == self.list.length)
 			self.emit('end');
@@ -52,7 +50,7 @@ function demo(url) {
 		console.log(err);
 	}).on('end', function () {
 		exports.fetchImg('cache/', url, list)
-		.on('progress', function (code, i) {
+		.on('progress', function (code, i, imgUrl) {
 			if (code != 0)
 				console.log('[' + i + '] fail:' + code);	
 		}).on('end', function () {

@@ -189,7 +189,10 @@ ImgUrlFetcher.prototype.parseImgUrl = function (url, options) {
 				break
 			default:
 				eval(totalBuf.toString('utf8'));
-				self.emit('data', d[0], options);
+				if (typeof d == 'undefined' || !util.isArray(d))
+					self.emit('error', 'Can not get img url: ' + url);
+				else
+					self.emit('data', d[0], options);
 				break;
 			}
 		});
