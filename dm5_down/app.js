@@ -9,56 +9,6 @@ var http = require('http');
 
 var conf = eval('(' + fs.readFileSync('conf.json', 'utf8') + ')');
 
-/*
-function download(prefix, list, index) {
-	if (index == list.length)
-		return;
-	var dir = conf.prefix + list[index].title + '/';
-	if (!fs.existsSync(dir))
-		fs.mkdirSync(dir);
-
-	var imgList = [];
-	var url = prefix + list[index].href;
-	fetchImgUrl(url).on('data', function (imgUrl, info) {
-		imgList[info.page - 1] = imgUrl;
-	}).on('error', function (err) {
-		console.log(err);
-		// Skip error page:
-		download(prefix, list, index + 1);
-	}).on('end', function () {
-		fetchImg(dir, url, imgList).on('progress', function (code, i, imgUrl) {
-			if (code != 0)
-				console.log('[' + i + '] fail: ' + code);
-		}).on('end', function () {
-			console.log(list[index].title + ' ... done');
-			download(prefix, list, index + 1);
-		}).fetchAll();
-	}).fetch();
-}
-
-function fetch(url, begin) {
-	var urlMeta = url_util.parse(url);
-	var prefix = urlMeta.protocol + '//' + urlMeta.hostname;
-	fetchList(url).on('end', function (list) {
-		download(prefix, list, begin);
-	}).on('error', function (err) {
-		console.log(err);
-	}).fetch();
-}
-
-function sampleApp(argv) {
-	var url = argv[2];
-	if (typeof url != 'string')
-		return 1;
-	var begin = argv[3];
-	if (typeof begin == 'string')
-		begin = parseInt(begin);
-	else
-		begin = 0;
-	fetch(url, begin);
-}
-*/
-
 function CliApp(argv) {
 	this.bookUrl = argv[2];
 	this.chapters = {};
@@ -69,12 +19,14 @@ CliApp.prototype.run = function () {
 		this.usage();
 		return;
 	}
+	if (this.bookUrl.charAt(this.bookUrl.length - 1) != '/')
+		this.bookUrl += '/';
 	var self = this;
 	self.checkHost(function () {
 		self.perpare(function () {
 			self.updateChapters(function () {
 				self.fetch(function () {
-					console.log('all done');
+					console.log('All done');
 				});
 			});
 		});
