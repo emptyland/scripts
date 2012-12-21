@@ -4,5 +4,6 @@
 *.node
 dm5_down/node_modules
 dm5_down/data/dm5.db
+dm5_down/cache
 fast_app/app_host_list.txt
 fast_app/fast_app

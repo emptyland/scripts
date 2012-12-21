@@ -30,6 +30,9 @@ set clipboard+=unnamed
 " 侦测文件类型
 filetype on
 
+" 设置限制标尺
+set cc=80
+
 " 载入文件类型插件
 filetype plugin on
 
@@ -57,7 +60,7 @@ highlight StatusLineNC guifg=Gray guibg=White
 " set cursorline
 
 " 设置配色方案
-colorscheme northland
+" colorscheme northland
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -156,17 +159,17 @@ set smartindent
 set cindent
 
 " 制表符为宽度
-set tabstop=2
+set tabstop=4
 
 " 统一缩进宽度
-set softtabstop=2
-set shiftwidth=2
+set softtabstop=4
+set shiftwidth=4
 
 " 不要用空格代替制表符
 set noexpandtab
 
 " 不要换行
-set nowrap
+" set nowrap
 
 "设置每行80个字符自动换行
 "set textwidth=80
@@ -217,39 +220,35 @@ if has("autocmd")
 endif " has("autocmd")
 
 " C/C++的编译和运行
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-exec "w"
-exec "make"
-" exec "! ./%<"
+map <F5> :call SingleMake()<CR>
+map <F6> :!../bin/fake_make.sh<CR>
+
+func! SingleMake()
+	let fileName = expand("%:t")
+	if (fileName == "" || &filetype != "c")
+		echohl WarningMsg | echo "No file can be compile." | echohl None
+		return
+	endif
+	set makeprg=clang\ -Wall\ -Wextra\ %\ -c\ -o\ %<.o
+	execute "make"
+	execute "copen"
 endfunc
+
 
 " shell script运行
-map <F6> :call CompileRunSH()<CR>
-func! CompileRunSH()
-exec "w"
-exec "!chmod a+x %"
-exec "!./%"
-endfunc
 
 " python运行
-"map <F7> :call CompileRunPyhton()<CR>
-"func! CompileRunPyhton()
-"exec "w"
-"exec "!chmod a+x %"
-"exec "!python ./%"
-"endfunc
 
 " 能够漂亮地显示.NFO文件
 set encoding=utf-8
-function! SetFileEncodings(encodings)
+func! SetFileEncodings(encodings)
     let b:myfileencodingsbak=&fileencodings
     let &fileencodings=a:encodings
-endfunction
-function! RestoreFileEncodings()
+endfunc
+func! RestoreFileEncodings()
     let &fileencodings=b:myfileencodingsbak
     unlet b:myfileencodingsbak
-endfunction
+endfunc
 
 au BufReadPre *.nfo call SetFileEncodings('cp437')|set ambiwidth=single
 au BufReadPost *.nfo call RestoreFileEncodings()
@@ -281,3 +280,4 @@ set showcmd
 
 " 总是在VIM窗口的右下角显示当前光标的行列信息
 set ruler
+
