@@ -225,11 +225,15 @@ map <F6> :!../bin/fake_make.sh<CR>
 
 func! SingleMake()
 	let fileName = expand("%:t")
-	if (fileName == "" || &filetype != "c")
+	if (fileName == "" || (&filetype != "c" && &filetype != "cpp"))
 		echohl WarningMsg | echo "No file can be compile." | echohl None
 		return
 	endif
-	set makeprg=clang\ -Wall\ -Wextra\ %\ -c\ -o\ %<.o
+	if (&filetype == "c")
+		set makeprg=clang\ -Wall\ -Wextra\ %\ -c\ -o\ %<.o
+	elseif (&filetype == "cpp")
+		set makeprg=clang++\ -std=c++11\ -Wall\ -Wextra\ -I../include\ %\ -c\ -o\ %<.o
+	endif
 	execute "make"
 	execute "copen"
 endfunc
