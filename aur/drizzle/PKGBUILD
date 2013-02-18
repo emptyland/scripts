@@ -1,0 +1,48 @@
+# This is an example PKGBUILD file. Use this as a start to creating your own,
+# and remove these comments. For more information, see 'man PKGBUILD'.
+# NOTE: Please fill out the license field for your package! If it is unknown,
+# then please put 'unknown'.
+
+# Maintainer: Your Name <youremail@domain.com>
+pkgname=drizzle7
+pkgver=2011.07.21
+pkgrel=1
+epoch=
+pkgdesc=""
+arch=('x86_64')
+url="http://agentzh.org/misc/nginx/${pkgname}-${pkgver}.tar.gz"
+license=('GPL')
+groups=()
+depends=(protobuf boost)
+makedepends=()
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source="http://agentzh.org/misc/nginx/${pkgname}-${pkgver}.tar.gz"
+noextract=()
+md5sums=('9f20cc2dc69553537e6c9b608409edda') #generate with 'makepkg -g'
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  CC=clang CXX=clang++ ./configure --prefix=/usr --without-server
+  make libdrizzle-1.0 -j9
+}
+
+#check() {
+#  cd "$srcdir/$pkgname-$pkgver"
+#  make -k check libdrizzle-1.0
+#}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}/" install-libdrizzle-1.0
+  ln -s "${pkgdir}/usr/include/libdrizzle-1.0/libdrizzle" "${pkgdir}/usr/include/libdrizzle"
+}
+
+# vim:set ts=2 sw=2 et:
