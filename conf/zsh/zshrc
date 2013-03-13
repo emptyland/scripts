@@ -31,8 +31,13 @@ bindkey "\e[F" end-of-line
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 
-EDITOR="vim"
+export EDITOR="vim"
+if [[ ${TERM} == "linux" ]]; then
+	export LANG='en_US.UTF-8'
+fi
 alias ls='ls --color=auto '
+alias ll='ls -l '
+alias lx='ls -l -a '
 alias grep='grep --color=auto '
 
 PROMPT="%{$terminfo[bold]$fg[green]%}%n%{$reset_color%}%{$terminfo[bold]$fg[green]%}@%m %{$fg[yellow]%}%1~ %{$reset_color%}%{$terminfo[bold]$fg[blue]%}>%{$reset_color%} "
