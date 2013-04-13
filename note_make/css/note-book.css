@@ -1,0 +1,49 @@
+body {
+	font-family: 微软雅黑, Arial, Helvetica, sans-serif;
+	margin : 0px 50px 0px 50px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #990000;
+}
+
+.mono {
+	font-family: Consolas, Arial, Helvetica, sans-serif;
+	color: #0000F0;
+	text-decoration: none;
+}
+
+a.home {
+	margin: 0px;
+	border-radius: 3px;
+	background-color: #545454;
+	padding: 3px;
+	text-decoration: none;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	color: #FFFFFF;
+}
+
+a.next, a.prev {
+	margin: 0px;
+	border-radius: 3px;
+	background-color: #5DBB5D;
+	padding: 3px;
+	text-decoration: none;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	color: #FFFFFF;
+}
+
+a.next:hover, a.prev:hover, a.home:hover {
+	background-color: #C000C0;
+}
+
+blockquote {
+	color: #004F00;
+	background: #d8ecd6;
+	border: 1px solid green;
+	border-radius: 3px;
+	padding: 5px;
+	width: 85%;
+}
