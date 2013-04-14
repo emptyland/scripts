@@ -1,4 +1,6 @@
 {
+	"name": "Project",
 	"homePage": "index.html",
+	"homeTitle": "Menu",
 	"title": ["Demo1", "Demo2", "Demo3"]
 }

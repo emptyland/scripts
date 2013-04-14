@@ -2,19 +2,23 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"text/template"
 )
 
 // Configure info for generator
 type configure struct {
-	HomePage string   `json:"homePage"`
-	Title    []string `json:"title"`
+	HomeTitle string   `json:"homeTitle"`
+	HomePage  string   `json:"homePage"`
+	Title     []string `json:"title"`
+	Name      string   `json:"name"`
 }
 
 type generator struct {
@@ -23,8 +27,10 @@ type generator struct {
 }
 
 const (
-	templateFileName = "template.html"
-	destFileName     = "%02dpage.html"
+	pageTemplateFileName  = "page_template.html"
+	indexTemplateFileName = "index_template.html"
+	destFileName          = "%02dpage.html"
+	indexFileName         = "index.html"
 )
 
 func main() {
@@ -56,6 +62,9 @@ func (self *generator) Run() error {
 	if err = self.findAll(); err != nil {
 		return err
 	}
+	if err = self.generateIndex(); err != nil {
+		return err
+	}
 	if err = self.generateAll(); err != nil {
 		return err
 	}
@@ -79,11 +88,13 @@ func (self *generator) findAll() error {
 			self.markDownFile = append(self.markDownFile, name)
 		}
 	}
+	sort.Strings(self.markDownFile)
 	return nil
 }
 
 type context struct {
 	Title     string
+	HomeTitle string
 	PrevPage  string
 	HomePage  string
 	NextPage  string
@@ -92,11 +103,39 @@ type context struct {
 	Content   string
 }
 
+func (self *generator) generateIndex() error {
+	ctx := context{
+		Title:     self.conf.Name,
+		HomeTitle: self.conf.HomeTitle,
+	}
+	tmpl := template.Must(template.New("").ParseFiles(indexTemplateFileName))
+
+	var buf bytes.Buffer
+	for i, page := range self.conf.Title {
+		buf.WriteString(fmt.Sprintf(`<a href="%s">%s</a><br />`,
+			fmt.Sprintf(destFileName, i), page))
+	}
+	ctx.Content = buf.String()
+
+	var err error
+	var file *os.File
+	file, err = os.Create(indexFileName)
+	if err != nil {
+		return err
+	}
+	if err = tmpl.ExecuteTemplate(file, indexTemplateFileName, ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (self *generator) generateAll() error {
 	ctx := context{HomePage: self.conf.HomePage}
+	tmpl := template.Must(template.New("").ParseFiles(pageTemplateFileName))
 
 	for i, mdFileName := range self.markDownFile {
 		ctx.Title = self.conf.Title[i]
+		ctx.HomeTitle = self.conf.HomeTitle
 		var err error
 		if err = self.getNearInfo(i, &ctx); err != nil {
 			return err
@@ -105,13 +144,12 @@ func (self *generator) generateAll() error {
 			return err
 		}
 
-		tmpl := template.Must(template.New("").ParseFiles(templateFileName))
 		var file *os.File
 		file, err = os.Create(fmt.Sprintf(destFileName, i))
 		if err != nil {
 			return err
 		}
-		if err = tmpl.ExecuteTemplate(file, templateFileName, ctx); err != nil {
+		if err = tmpl.ExecuteTemplate(file, pageTemplateFileName, ctx); err != nil {
 			return err
 		}
 	}
@@ -125,7 +163,7 @@ func (self *generator) getNearInfo(i int, ctx *context) error {
 	} else {
 		// First Page
 		ctx.PrevPage = ctx.HomePage
-		ctx.PrevTitle = "Home"
+		ctx.PrevTitle = self.conf.HomeTitle
 	}
 
 	if i < len(self.conf.Title)-1 {
@@ -134,7 +172,7 @@ func (self *generator) getNearInfo(i int, ctx *context) error {
 	} else {
 		// Last Page
 		ctx.NextPage = ctx.HomePage
-		ctx.NextTitle = "Home"
+		ctx.NextTitle = self.conf.HomeTitle
 	}
 	return nil
 }
