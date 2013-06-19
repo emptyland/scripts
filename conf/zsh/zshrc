@@ -40,4 +40,7 @@ alias ll='ls -l '
 alias lx='ls -l -a '
 alias grep='grep --color=auto '
 
-PROMPT="%{$terminfo[bold]$fg[green]%}%n%{$reset_color%}%{$terminfo[bold]$fg[green]%}@%m %{$fg[yellow]%}%1~ %{$reset_color%}%{$terminfo[bold]$fg[blue]%}>%{$reset_color%} "
+source /home/niko/.zsh/git-prompt/zshrc.sh
+
+PROMPT='%{$terminfo[bold]$fg[green]%}%n%{$reset_color%}%{$terminfo[bold]$fg[green]%}@%m %{$fg[yellow]%}%1~ %{$reset_color%}$(git_super_status)%{$terminfo[bold]$fg[blue]%}>%{$reset_color%} '
+
