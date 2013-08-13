@@ -38,11 +38,11 @@ CliApp.prototype.checkHost = function (done) {
 	var self = this;
 	self.prefix = urlMeta.protocol + '//' + urlMeta.host;
 	http.get(this.prefix, function (res) {
-		res.on('end', function () {
-			if (typeof res.headers.location == 'string')
-				self.prefix = res.headers.location;
-			done();
-		});
+		if (typeof res.headers.location == 'string')
+			self.prefix = res.headers.location;
+		done();
+	}).on('error', function (err) {
+		console.log(err);
 	});
 }
 

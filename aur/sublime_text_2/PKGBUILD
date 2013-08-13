@@ -1,6 +1,6 @@
 # Maintainer: Somebody <somebody[at]foo[dot]tld>
 pkgname=sublime_text
-pkgver=2.0.1
+pkgver=2.0.2
 pkgrel=2
 pkgdesc="Sublime Text is a sophisticated text editor for code, markup and prose.
 You'll love the slick user interface, extraordinary features and amazing performance."
@@ -14,9 +14,9 @@ conflicts=()
 replaces=()
 backup=()
 install=''
-source=("http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.1%20x64.tar.bz2"
+source=("http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20x64.tar.bz2"
         "sublime_text.desktop")
-md5sums=('bd816d93239a0af9ade257b2a9dcf8d2'
+md5sums=('699cd26d7fe0bada29eb1b2cd7b50e4b'
          'cf0b6a7d5c93b4ee5f39ba252d6b64e9')
 
 build() {
