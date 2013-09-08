@@ -84,13 +84,22 @@ ImgUrlFetcher.prototype.parseHtml = function (url, content) {
 }
 
 ImgUrlFetcher.prototype.getKey = function (url, scriptNode) {
+	var finger = 'eval(function(p,a,c,k,e,d)';
 	var script = scriptNode[0].children[0].data;
 	var keygen = scriptNode[1].children[0].data;
 	
 	var self = this;
 	eval(script);
-	if (keygen.indexOf('eval(function(p,a,c,k,e,d)') >= 0) {
-		//console.log(keygen);
+	for (var i = 1; i < scriptNode.length; ++i) {
+		if (typeof scriptNode[i].children == 'undefined' ||
+			typeof scriptNode[i].children[0] == 'undefined')
+			continue;
+		if (scriptNode[i].children[0].data.indexOf(finger) >= 0) {
+			keygen = scriptNode[i].children[0].data;
+			break;
+		}
+	}
+	if (keygen.indexOf(finger) >= 0) {
 		var $ = function (a) {
 			return {
 				val: function(key) {
@@ -164,7 +173,6 @@ ImgUrlFetcher.prototype.parseImgUrl = function (url, options) {
 		language: options.language,
 		key: options.key
 	});
-	//console.log(queryUrl);
 
 	var self = this;
 	// Request options:
@@ -190,7 +198,7 @@ ImgUrlFetcher.prototype.parseImgUrl = function (url, options) {
 			default:
 				eval(totalBuf.toString('utf8'));
 				if (typeof d == 'undefined' || !util.isArray(d))
-					self.emit('error', 'Can not get img url: ' + url);
+					self.emit('error', 'Can not get img url: ' + url + ' queryUrl:' + queryUrl);
 				else
 					self.emit('data', d[0], options);
 				break;
