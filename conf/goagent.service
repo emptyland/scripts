@@ -1,0 +1,10 @@
+[Unit]
+Description=Daemon to GoAgent proxy client
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python2 /opt/goagent_client/proxy.py
