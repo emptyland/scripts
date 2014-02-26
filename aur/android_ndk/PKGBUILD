@@ -1,0 +1,29 @@
+# Maintainer: Somebody <somebody[at]foo[dot]tld>
+pkgname=android_ndk
+pkgver=r9c
+pkgrel=1
+pkgdesc="Google Android NDK"
+url="http://developer.android.com/tools/index.html"
+arch=('x86_64')
+license=('GPL')
+depends=('eclipse')
+optdepends=()
+options=(!strip)
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+install=''
+source=("http://dl.google.com/android/ndk/android-ndk-${pkgver}-linux-x86_64.tar.bz2")
+md5sums=('e9c3fd9881c811753bb57f701b3e05b1')
+
+build() {
+  echo build
+}
+
+package() {
+  mkdir -p "${pkgdir}/opt"
+  mv android-ndk-${pkgver} "${pkgdir}/opt/"
+}
+
+# vim:set ts=2 sw=2 et:

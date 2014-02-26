@@ -1,0 +1,29 @@
+# Maintainer: Somebody <somebody[at]foo[dot]tld>
+pkgname=android_sdk
+pkgver=r22.3
+pkgrel=1
+pkgdesc="Google Android SDK"
+url="http://developer.android.com/tools/index.html"
+arch=('any')
+license=('GPL')
+depends=('eclipse')
+optdepends=()
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+install=''
+source=("http://dl.google.com/android/android-sdk_${pkgver}-linux.tgz")
+md5sums=('6ae581a906d6420ad67176dff25a31cc')
+
+build() {
+  echo build
+}
+
+package() {
+  local target="${pkgdir}/opt/android_sdk"
+  mkdir -p ${target}
+  cp -r android-sdk-linux/* "${target}"
+}
+
+# vim:set ts=2 sw=2 et:
