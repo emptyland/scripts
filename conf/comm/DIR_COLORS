@@ -195,8 +195,23 @@ EXEC 01;32
 .patch 00;32
 .diff 00;32
 .log 00;32
+.conf 00;32
+.ini 00;32
+.inf 00;32
 .tex 00;32
 .doc 00;32
+.java 00;32
+.scala 00;32
+.go 00;32
+.c 00;32
+.cc 00;32
+.h 00;32
+.py 00;32
+.rb 00;32
+.xml 00;32
+.yml 00;32
+.md 00;32
+.markdown 00;32
 
 # audio formats
 .aac 00;36

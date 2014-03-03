@@ -1,1 +1,1 @@
-* 11 * * * /usr/bin/pacman -Syu -q --noconfirm
+0 11 * * * root /usr/bin/pacman -Syu -q --noconfirm
