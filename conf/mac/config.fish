@@ -1,5 +1,6 @@
 alias pps='ps -ef | grep -v grep | grep --color=auto '
 alias ldd='otool -L '
+alias grep='grep --color=auto '
 alias cm4='ssh wuke.cj@login1.cm4.taobao.org'
 alias cm3='ssh wuke.cj@login1.cm3.taobao.org'
 
