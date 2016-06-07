@@ -45,7 +45,7 @@ def route_chmod(arg, dirname, names):
       os.chmod(abs_path, arg[0])
   print '< finally chmod', dirname
   os.chmod(os.path.realpath(dirname), arg[1])
-  
+
 
 def route_chown(arg, dirname, names):
   """change files/direcory's owner,
