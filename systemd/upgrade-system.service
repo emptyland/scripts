@@ -1,0 +1,6 @@
+[Unit]
+Description=Upgrade all system
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman -Syu -q --noconfirm
